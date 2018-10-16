@@ -26,7 +26,6 @@ public class MailConfigurations {
 			
 			
 			dsConnection.prepareStatement(sql);
-			System.out.println("sql : "+sql);
 			ResultSet rs = dsConnection.executeQuery();
 			properties.clear();
 			while (rs.next()) {

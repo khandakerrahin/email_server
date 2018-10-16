@@ -80,6 +80,20 @@ public class UserOperations {
 			}
 		}else
 			isUnicode=false;
-		return (new EmailSender(con,logWriter,configurations)).send(mb.containsKey("from")?(String)mb.get("from"):"", mb.containsKey("to")?(String)mb.get("to"):"", mb.containsKey("cc")?(String)mb.get("cc"):"", mb.containsKey("bcc")?(String)mb.get("bcc"):"", mb.containsKey("subject")?(String)mb.get("subject"):"", mb.containsKey("mailBody")?(String)mb.get("mailBody"):"",isUnicode );
+		String uname = mb.containsKey("uname")?(String)mb.get("uname"):"";
+		String upass = mb.containsKey("upass")?(String)mb.get("upass"):"";
+		
+		String appPass = this.configurations.getMailUsers().containsKey(uname)? this.configurations.getMailUsers().get(uname):"";
+		
+		if(upass.equals(appPass) && appPass!="") {
+			System.out.println("Application authentication successful.");
+			return (new EmailSender(con,logWriter,configurations)).send(mb.containsKey("from")?(String)mb.get("from"):"", mb.containsKey("to")?(String)mb.get("to"):"", mb.containsKey("cc")?(String)mb.get("cc"):"", mb.containsKey("bcc")?(String)mb.get("bcc"):"", mb.containsKey("subject")?(String)mb.get("subject"):"", mb.containsKey("mailBody")?(String)mb.get("mailBody"):"",isUnicode );
+		}
+		else {
+			System.out.println("Application authentication failed.");
+			HashMap<String, String> retval=new HashMap<>(2,1.0f);
+			retval.put("ErrorCode", "-5"); retval.put("ErrorMessage","Application authentication failed.");
+			return retval;
+		}
 	}
 }

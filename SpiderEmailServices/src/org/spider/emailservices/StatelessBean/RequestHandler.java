@@ -108,7 +108,8 @@ public class RequestHandler implements RequestHandlerLocal {
 				retVal=new Gson().toJson(retval);
 				this.logWriter.setResponse(retVal);
 				LogWriter.LOGGER.info("retVal"+retVal);
-				this.logWriter.flush(dsConn);
+				// this.logWriter.flush(dsConn);
+				this.logWriter.flush();
 				try {
 					dsConn.getConnection().close();
 				} catch (SQLException e) {

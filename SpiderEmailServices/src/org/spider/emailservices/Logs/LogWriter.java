@@ -106,26 +106,21 @@ public class LogWriter {
 		
 	}
 
-	/**
-	 * Inserts the log into table app_log after calling validateVariableBounds()
-	 * @return true if insert successful; false otherwise
-	 */
-	public boolean flush() {
-		return flush(this.dsConn);
-	}
+	
 	/**
 	 * Inserts the log into table app_log after calling validateVariableBounds()
 	 * @param dsConn datasource to use for inserting the log
 	 * @return true if insert successful; false otherwise
 	 */
-	public boolean flush(PostalServicesDS dsConn) {
+	public boolean flush() {
 		boolean retval=false;
+		PostalServicesDS dsConn=new PostalServicesDS();
 		this.validateVariableBounds();
 //		SimpleDataSource sData = new SimpleDataSource(org.Banglalink.InhouseUtility.dataSource.DSInfo.getDS_INPATHS_NEW());
 		String sql = "insert into app_log"
 				+"(action,user_id,log,status,channel,additional_info,target,input_parameters,response)"
 				+" values(?,?,?,?,?,?,?,?,?)";
-				
+		//System.out.println("SQL : "+sql);
 //				+",'"+msisdn+"'"
 ////				+","+((subscriptionTime.equals("null")||subscriptionTime.equals("sysdate"))?subscriptionTime:"to_date('"+subscriptionTime+"','yyyymmddhh24miss')")//"sysdate"//subscriptionTime
 //				+",'"+status+"'"
@@ -165,29 +160,32 @@ public class LogWriter {
 //			dsConn.getPreparedStatement().setString(8, this.inputParameters);
 //			dsConn.getPreparedStatement().setString(9, this.response);
 			dsConn.execute();
+			dsConn.commit();
 			if(dsConn.getConnection() != null) dsConn.closePreparedStatement();
 			retval=true;
 		} catch (SQLException e) {
 			if(dsConn.getConnection() != null) {
 				try {
 					dsConn.closePreparedStatement();
+					dsConn.rollback();
 				} catch (SQLException e1) {
 					LOGGER.severe(e1.getMessage());
 				}
 			}
-			LOGGER.severe("PostalServices: "+"LogWriter.flush() SQLException:"+e.getMessage());
+			LOGGER.severe("EmailServices: "+"LogWriter.flush() SQLException:"+e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
 			if(dsConn.getConnection() != null) {
 				try {
 					dsConn.closePreparedStatement();
+					dsConn.rollback();
 				} catch (SQLException e1) {
 					LOGGER.severe(e1.getMessage());
 				}
 			}
-			LOGGER.severe("PostalServices: "+"LogWriter.flush() Exception:"+e.getMessage());
+			LOGGER.severe("EmailServices: "+"LogWriter.flush() Exception:"+e.getMessage());
 		}
-		LOGGER.info("PostalServices: "+"LogWriter"+"flush() Response:"+retval);
+		LOGGER.info("EmailServices: "+"LogWriter"+"flush() Response:"+retval);
 		return retval;
 	}
 

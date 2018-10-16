@@ -14,11 +14,13 @@ public class Configurations {
 	HashMap<String, String> DBResponseCode;
 	MailConfigurations mailConfigurations;
 	MailMappings mailMappings;
+	MailUsers mailUsers;
 	public Configurations() {
 		replySMSLoader = new ReplyMessageLoader();
 		DBResponseCode = new HashMap<String,String>();
 		mailConfigurations = new MailConfigurations();
 		mailMappings=new MailMappings();
+		mailUsers = new MailUsers();
 	}
 
 	public void loadConfigurationFromDB() {
@@ -27,6 +29,7 @@ public class Configurations {
 		replySMSLoader.getRelpyMessage(dsConnection);
 		mailConfigurations.getMailConfigurations(dsConnection);
 		mailMappings.getMailMappings(dsConnection);
+		mailUsers.getMailUsers(dsConnection);
 		}finally{
 			try {
 					dsConnection.con.close();
@@ -51,6 +54,11 @@ public class Configurations {
 	public HashMap<String,String> getMailMappings(){
 		return  this.mailMappings.map;
 	}
+	public HashMap<String,String> getMailUsers(){
+		return  this.mailUsers.map;
+	}
+	
+	
 	/**
 	 * @return HashMap<String,String> DBResponseCode
 	 */
