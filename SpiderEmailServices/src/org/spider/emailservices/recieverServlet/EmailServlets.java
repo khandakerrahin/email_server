@@ -58,23 +58,22 @@ public class EmailServlets extends HttpServlet {
 			//GenerateEmail ge = new GenerateEmail(request);
 			//ge.generate();
 			PostalServicesDS dsConn=new PostalServicesDS();
-			
+			LOGGER.info("Mail request recieved.");
 			twelveAgo = System.currentTimeMillis() - TWELVE_HOURS;
 			if (confUpdateTime < twelveAgo) {
-				LOGGER.info("confUpdateTime is older than 12 hours");
+				LOGGER.info("ConfUpdateTime is older than 12 hours");
 				LOGGER.info("Loading configuration from DB ..");
 				loadConf.loadConfigurationFromDB();
 				confUpdateTime = System.currentTimeMillis();
 				LOGGER.info("Loading configuration from DB complete.");
 			}
 			else{
-				LOGGER.info("confUpdateTime is less than 12 hours");
+				LOGGER.info("ConfUpdateTime is less than 12 hours");
 			}
-			LOGGER.info("initiating mail service.");
+			LOGGER.info("Initiating mail service.");
 			
 			String resp = processNewRequest(request,true);
-			pw.println("request response : " + resp);
-			pw.println("request sent successfully.");
+			LOGGER.info("SpiderEmailService Response : "+ resp);
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -113,8 +112,8 @@ public class EmailServlets extends HttpServlet {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-		LogWriter.LOGGER.info("Message :"+message);
-		LogWriter.LOGGER.info("Message Body :"+messageBody);
+		//LogWriter.LOGGER.info("Message :"+message);
+		//LogWriter.LOGGER.info("Message Body :"+messageBody);
 		String retVal=null;
 		
 		try {
