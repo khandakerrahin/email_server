@@ -71,6 +71,7 @@ public class EmailServlets extends HttpServlet {
 			
 			String resp = processNewRequest(request,true);
 			LOGGER.info("SpiderEmailService Response : "+ resp);
+			pw.println("request response : " + resp);
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
