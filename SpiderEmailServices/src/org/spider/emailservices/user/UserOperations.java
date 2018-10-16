@@ -92,7 +92,7 @@ public class UserOperations {
 		else {
 			System.out.println("Application authentication failed.");
 			HashMap<String, String> retval=new HashMap<>(2,1.0f);
-			retval.put("ErrorCode", "-5"); retval.put("ErrorMessage","Application authentication failed.");
+			retval.put("ErrorCode", "-5"); retval.put("ErrorMessage","SpiderEmailServices : Application authentication failed.");
 			return retval;
 		}
 	}
