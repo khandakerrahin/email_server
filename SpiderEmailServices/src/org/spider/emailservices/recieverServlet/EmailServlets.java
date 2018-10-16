@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import javax.jms.JMSException;
-import javax.jms.MapMessage;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.spider.emailservices.DataSources.PostalServicesDS;
 import org.spider.emailservices.Initializations.Configurations;
 import org.spider.emailservices.Logs.LogWriter;
-import org.spider.emailservices.MDB.PostalServiceMDB;
 import org.spider.emailservices.Utilities.NullPointerExceptionHandler;
 import org.spider.emailservices.user.UserOperations;
 
