@@ -33,6 +33,7 @@ public class EmailServlets extends HttpServlet {
 	private static final long TWELVE_HOURS = 12 * 10 * 60 * 1000;
 	private static long confUpdateTime = System.currentTimeMillis() - TWELVE_HOURS - 1000;
 	long twelveAgo = System.currentTimeMillis() - TWELVE_HOURS;
+	private static Boolean appInUse = false;
 	LogWriter logWriter;
     /**
      * @see HttpServlet#HttpServlet()
@@ -71,11 +72,12 @@ public class EmailServlets extends HttpServlet {
 			
 			String resp = processNewRequest(request,true);
 			LOGGER.info("SpiderEmailService Response : "+ resp);
+			appInUse = false;
 			pw.println(resp);
-			
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			LOGGER.severe(ex.getMessage());
+			appInUse = false;
 		}
 		// http://localhost:8080/EmailTemplateGenerator/EmailServlet?name=Rahin&cardType=VISA&cardNumber=2441139&amount=237&merchantBankID=1193&transactionType=purchase&conversionRate=1.04&ipAddress=1.2.3.4&billingAddress=Spider%20Digital&phoneNumber=2441139&email=shaker@spiderdxb.com
     }
@@ -117,7 +119,18 @@ public class EmailServlets extends HttpServlet {
 		try {
 			switch(action.toUpperCase()) {
 			case "SENDEMAIL":
+				appInUse = true;
 				retval=new UserOperations(dsConn.con,this.logWriter,loadConf).sendEmail(message,messageBody);
+				break;
+			case "RELOADCONFIG":
+				retval=new UserOperations(dsConn.con,this.logWriter,loadConf).verifyUser(message,messageBody);
+				if(Integer.parseInt(retval.get("ErrorCode"))==0) {
+					LogWriter.LOGGER.info("retVal: "+retVal);
+					reloadConfig();
+				}
+				else{
+					LogWriter.LOGGER.info("retVal: "+retVal);
+				}
 				break;
 			default:
 				retval.replace("ErrorCode", "-9"); retval.replace("ErrorMessage","Invalid action");
@@ -144,4 +157,25 @@ public class EmailServlets extends HttpServlet {
 		return retVal;
 	}
 
+	private void reloadConfig() {
+		Configurations reloadConf = new Configurations();
+		LOGGER.info("Reloading configuration from DB ..");
+		reloadConf.loadConfigurationFromDB();
+		confUpdateTime = System.currentTimeMillis();
+		if(!appInUse) {
+			loadConf = reloadConf;
+		}
+		else {
+			LOGGER.info("Application in use : waiting to reload");
+			while(appInUse) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			loadConf = reloadConf;
+		}
+		LOGGER.info("Reloading configuration from DB complete.");
+	}
 }

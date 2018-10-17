@@ -24,6 +24,67 @@ public class UserOperations {
 		this.logWriter=logWriter;
 		this.configurations=configurations;
 	}
+	
+	public HashMap<String, String> verifyUser(String message, String messageBody) {
+		Map<String, Object> mb;
+		if(NullPointerExceptionHandler.isNullOrEmpty(messageBody))
+			mb = new Gson().fromJson((String)message, new TypeToken<HashMap<String, Object>>() {}.getType());
+		else {
+			try {
+				mb = new Gson().fromJson((String)messageBody, new TypeToken<HashMap<String, Object>>() {}.getType());
+			}catch(com.google.gson.JsonSyntaxException e) {
+
+				try {
+					mb = new Gson().fromJson((String)URLDecoder.decode(messageBody, "UTF-8"), new TypeToken<HashMap<String, Object>>() {}.getType());
+				} catch (JsonSyntaxException e1) {
+					HashMap<String, String> retval=new HashMap<>();
+					retval.put("ErrorCode", "-13"); retval.put("ErrorMessage","JSON syntax error. JsonSyntaxException");
+					return retval;
+				} catch (UnsupportedEncodingException e1) {
+					HashMap<String, String> retval=new HashMap<>();
+					retval.put("ErrorCode", "-14"); retval.put("ErrorMessage","JSON syntax error. JsonSyntaxException & UnsupportedEncodingException");
+					return retval;
+				}
+
+			}catch(java.lang.IllegalStateException e) {
+				try {
+					mb = new Gson().fromJson((String)URLDecoder.decode(messageBody, "UTF-8"), new TypeToken<HashMap<String, Object>>() {}.getType());
+				} catch (JsonSyntaxException e1) {
+					HashMap<String, String> retval=new HashMap<>();
+					retval.put("ErrorCode", "-13"); retval.put("ErrorMessage","JSON syntax error. JsonSyntaxException");
+					return retval;
+				} catch (UnsupportedEncodingException e1) {
+					HashMap<String, String> retval=new HashMap<>();
+					retval.put("ErrorCode", "-14"); retval.put("ErrorMessage","JSON syntax error. IllegalStateException & UnsupportedEncodingException");
+					return retval;
+				}
+			}
+		}
+		
+		String uname = mb.containsKey("uname")?(String)mb.get("uname"):"";
+		String upass = mb.containsKey("upass")?(String)mb.get("upass"):"";
+		
+		String appPass = this.configurations.getMailUsers().containsKey(uname)? this.configurations.getMailUsers().get(uname):"";
+		
+		if(upass.equals(appPass) && appPass!="") {
+			System.out.println("Application authentication successful.");
+			HashMap<String, String> retval=new HashMap<>(2,1.0f);
+			
+			try {
+				retval.put("ErrorCode", "0");
+				retval.put("ErrorMessage","Configuration reloaded");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return retval;
+		}
+		else {
+			HashMap<String, String> retval=new HashMap<>(2,1.0f);
+			retval.put("ErrorCode", "-5"); retval.put("ErrorMessage","SpiderEmailServices : User is not authorized to perform this action.");
+			return retval;
+		}
+	}
 
 	public HashMap<String, String> sendEmail(String message, String messageBody) {
 		Map<String, Object> mb;
