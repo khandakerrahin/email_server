@@ -129,7 +129,8 @@ public class EmailServlets extends HttpServlet {
 					reloadConfig();
 				}
 				else{
-					LogWriter.LOGGER.info("retVal: "+retVal);
+					LogWriter.LOGGER.severe(retVal);
+					LogWriter.LOGGER.severe("Email sending failed.");
 				}
 				break;
 			default:
