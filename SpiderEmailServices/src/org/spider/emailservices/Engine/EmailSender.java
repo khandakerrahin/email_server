@@ -9,6 +9,7 @@ import javax.mail.internet.InternetAddress;
 import org.spider.emailservices.Initializations.Configurations;
 import org.spider.emailservices.Logs.LogWriter;
 import org.spider.emailservices.Utilities.NullPointerExceptionHandler;
+import org.spider.emailservices.recieverServlet.EmailServlets;
 
 public class EmailSender {
 	public final String GMAIL_KEY="GMAIL";
@@ -95,6 +96,16 @@ public class EmailSender {
 			recipientExists=true;
 		}
 		if(retval.get("ErrorCode")=="-1" && recipientExists && from!=null) {
+			
+			//waiting for reload
+			while(EmailServlets.reloadInProgress) {
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			String configurationId=this.configurations.getMailMappings().containsKey(from.getAddress())? this.configurations.getMailMappings().get(from.getAddress()):"";
 			String gateway= (this.configurations.getMailConfigurations().containsKey( configurationId )?
 				((String) this.configurations.getMailConfigurations().get(configurationId).get("gateway")) :"");
@@ -108,12 +119,31 @@ public class EmailSender {
 			case GMAIL_KEY: 
 				LogWriter.LOGGER.info(GMAIL_KEY+" Sender");
 				GmailProcessor gmailProcessor=new GmailProcessor();
+				
+				// waiting for reload
+				while(EmailServlets.reloadInProgress) {
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				gmailProcessor.setCredentials((String)this.configurations.getMailConfigurations().get(configurationId).get("username"), (String)this.configurations.getMailConfigurations().get(configurationId).get("password"));
 				retval=gmailProcessor.send(from, to, cc, bcc, subject, mailBody, isUnicode);
 				break;
 			case ZOHO_KEY:
 				LogWriter.LOGGER.info(ZOHO_KEY+" Sender");
 				ZmailProcessor zmailProcessor=new ZmailProcessor();
+				// waiting for reload
+				while(EmailServlets.reloadInProgress) {
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				zmailProcessor.setCredentials((String)this.configurations.getMailConfigurations().get(this.configurations.getMailMappings().get(from.getAddress())).get("username"), (String)this.configurations.getMailConfigurations().get(this.configurations.getMailMappings().get(from.getAddress())).get("password"));
 				retval=zmailProcessor.send(from, to, cc, bcc, subject, mailBody, isUnicode);
 				break;

@@ -10,6 +10,7 @@ import org.spider.emailservices.Engine.EmailSender;
 import org.spider.emailservices.Initializations.Configurations;
 import org.spider.emailservices.Logs.LogWriter;
 import org.spider.emailservices.Utilities.NullPointerExceptionHandler;
+import org.spider.emailservices.recieverServlet.EmailServlets;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -63,6 +64,14 @@ public class UserOperations {
 		
 		String uname = mb.containsKey("uname")?(String)mb.get("uname"):"";
 		String upass = mb.containsKey("upass")?(String)mb.get("upass"):"";
+		
+		
+		
+		
+		
+		// to-do
+		
+		
 		
 		String appPass = this.configurations.getMailUsers().containsKey(uname)? this.configurations.getMailUsers().get(uname):"";
 		
@@ -144,6 +153,15 @@ public class UserOperations {
 		String uname = mb.containsKey("uname")?(String)mb.get("uname"):"";
 		String upass = mb.containsKey("upass")?(String)mb.get("upass"):"";
 		
+		// wait for reload
+		while(EmailServlets.reloadInProgress) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		String appPass = this.configurations.getMailUsers().containsKey(uname)? this.configurations.getMailUsers().get(uname):"";
 		
 		if(upass.equals(appPass) && appPass!="") {

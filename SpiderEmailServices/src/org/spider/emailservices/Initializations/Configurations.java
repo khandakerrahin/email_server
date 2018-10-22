@@ -15,6 +15,12 @@ public class Configurations {
 	MailConfigurations mailConfigurations;
 	MailMappings mailMappings;
 	MailUsers mailUsers;
+	
+	ReplyMessageLoader replySMSLoaderTemp;
+	MailConfigurations mailConfigurationsTemp;
+	MailMappings mailMappingsTemp;
+	MailUsers mailUsersTemp;
+	
 	public Configurations() {
 		replySMSLoader = new ReplyMessageLoader();
 		DBResponseCode = new HashMap<String,String>();
@@ -40,6 +46,36 @@ public class Configurations {
 		}
 	}
 
+	public Boolean reloadConf() {
+		Boolean retVal = false;
+		replySMSLoaderTemp = new ReplyMessageLoader();
+		mailConfigurationsTemp = new MailConfigurations();
+		mailMappingsTemp =new MailMappings();
+		mailUsersTemp = new MailUsers();
+		try {
+			dsConnection=new PostalServicesDS();
+			replySMSLoaderTemp.getRelpyMessage(dsConnection);
+			mailConfigurationsTemp.getMailConfigurations(dsConnection);
+			mailMappingsTemp.getMailMappings(dsConnection);
+			mailUsersTemp.getMailUsers(dsConnection);
+			retVal = true;
+			}finally{
+				try {
+						dsConnection.con.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+						LogWriter.LOGGER.severe(e.getMessage());
+					}
+			}
+		return retVal;
+	}
+	
+	public void switchConf() {
+		replySMSLoader = replySMSLoaderTemp;
+		mailConfigurations = mailConfigurationsTemp;
+		mailMappings = mailMappingsTemp;
+		mailUsers = mailUsersTemp;
+	}
 	/**
 	 * @return HashMap(rawtypes) replySMSLoader.replyMessage
 	 */

@@ -33,14 +33,14 @@ public class EmailServlets extends HttpServlet {
 	private static final long TWELVE_HOURS = 12 * 10 * 60 * 1000;
 	private static long confUpdateTime = System.currentTimeMillis() - TWELVE_HOURS - 1000;
 	long twelveAgo = System.currentTimeMillis() - TWELVE_HOURS;
-	private static Boolean appInUse = false;
+	public static Boolean reloadInProgress = false;
 	LogWriter logWriter;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public EmailServlets() {
         super();
-        // TODO Auto-generated constructor stub
+        loadConf.loadConfigurationFromDB();
     }
 
 	/**
@@ -57,27 +57,14 @@ public class EmailServlets extends HttpServlet {
 			//ge.generate();
 			PostalServicesDS dsConn=new PostalServicesDS();
 			LOGGER.info("Mail request recieved.");
-			twelveAgo = System.currentTimeMillis() - TWELVE_HOURS;
-			if (confUpdateTime < twelveAgo) {
-				LOGGER.info("ConfUpdateTime is older than 12 hours");
-				LOGGER.info("Loading configuration from DB ..");
-				loadConf.loadConfigurationFromDB();
-				confUpdateTime = System.currentTimeMillis();
-				LOGGER.info("Loading configuration from DB complete.");
-			}
-			else{
-				LOGGER.info("ConfUpdateTime is less than 12 hours");
-			}
 			LOGGER.info("Initiating mail service.");
 			
 			String resp = processNewRequest(request,true);
 			LOGGER.info("SpiderEmailService Response : "+ resp);
-			appInUse = false;
 			pw.println(resp);
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			LOGGER.severe(ex.getMessage());
-			appInUse = false;
 		}
 		// http://localhost:8080/EmailTemplateGenerator/EmailServlet?name=Rahin&cardType=VISA&cardNumber=2441139&amount=237&merchantBankID=1193&transactionType=purchase&conversionRate=1.04&ipAddress=1.2.3.4&billingAddress=Spider%20Digital&phoneNumber=2441139&email=shaker@spiderdxb.com
     }
@@ -119,7 +106,6 @@ public class EmailServlets extends HttpServlet {
 		try {
 			switch(action.toUpperCase()) {
 			case "SENDEMAIL":
-				appInUse = true;
 				retval=new UserOperations(dsConn.con,this.logWriter,loadConf).sendEmail(message,messageBody);
 				break;
 			case "RELOADCONFIG":
@@ -159,23 +145,15 @@ public class EmailServlets extends HttpServlet {
 	}
 
 	private void reloadConfig() {
-		Configurations reloadConf = new Configurations();
 		LOGGER.info("Reloading configuration from DB ..");
-		reloadConf.loadConfigurationFromDB();
 		confUpdateTime = System.currentTimeMillis();
-		if(!appInUse) {
-			loadConf = reloadConf;
-		}
-		else {
-			LOGGER.info("Application in use : waiting to reload");
-			while(appInUse) {
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+		if(loadConf.reloadConf()) {
+			reloadInProgress = true;
+			try{
+				loadConf.switchConf();
+			}finally {
+				reloadInProgress = false;
 			}
-			loadConf = reloadConf;
 		}
 		LOGGER.info("Reloading configuration from DB complete.");
 	}
