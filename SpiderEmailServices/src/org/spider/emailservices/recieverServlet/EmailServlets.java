@@ -30,9 +30,6 @@ public class EmailServlets extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public Configurations loadConf = new Configurations();
 	private static final Logger LOGGER = Logger.getLogger(EmailServlets.class.getName()); 
-	private static final long TWELVE_HOURS = 12 * 10 * 60 * 1000;
-	private static long confUpdateTime = System.currentTimeMillis() - TWELVE_HOURS - 1000;
-	long twelveAgo = System.currentTimeMillis() - TWELVE_HOURS;
 	public static Boolean reloadInProgress = false;
 	LogWriter logWriter;
     /**
@@ -60,7 +57,6 @@ public class EmailServlets extends HttpServlet {
 			LOGGER.info("Initiating mail service.");
 			
 			String resp = processNewRequest(request,true);
-			LOGGER.info("SpiderEmailService Response : "+ resp);
 			pw.println(resp);
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -112,11 +108,8 @@ public class EmailServlets extends HttpServlet {
 				retval=new UserOperations(dsConn.con,this.logWriter,loadConf).verifyUser(message,messageBody);
 				if(Integer.parseInt(retval.get("ErrorCode"))==0) {
 					LogWriter.LOGGER.info("retVal: "+retVal);
+					LogWriter.LOGGER.info("reloading configurations");
 					reloadConfig();
-				}
-				else{
-					LogWriter.LOGGER.severe(retVal);
-					LogWriter.LOGGER.severe("Email sending failed.");
 				}
 				break;
 			default:
@@ -146,7 +139,6 @@ public class EmailServlets extends HttpServlet {
 
 	private void reloadConfig() {
 		LOGGER.info("Reloading configuration from DB ..");
-		confUpdateTime = System.currentTimeMillis();
 		if(loadConf.reloadConf()) {
 			reloadInProgress = true;
 			try{
