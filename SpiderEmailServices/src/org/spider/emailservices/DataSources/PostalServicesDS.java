@@ -22,9 +22,16 @@ public class PostalServicesDS {
 
 	public PostalServicesDS(){
 		super();
+		/*
+		//test
 		String url = "jdbc:oracle:thin:@spiderdxb-db-oracle.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:1521:spiora";
 		String userName = "spiderdbuserTest";
 		String password = "spiderdbuserTest";/**/
+		
+		//live
+		String url = "jdbc:oracle:thin:@spiderdxb-db-oracle.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:1521:spiora";
+		String userName = "spiderdbuser";
+		String password = "Sp1d3rDbUs3R";/**/
 		
 		
 		OracleConnect oracleConnect = new OracleConnect(url, userName, password);

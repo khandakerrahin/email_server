@@ -65,14 +65,6 @@ public class UserOperations {
 		String uname = mb.containsKey("uname")?(String)mb.get("uname"):"";
 		String upass = mb.containsKey("upass")?(String)mb.get("upass"):"";
 		
-		
-		
-		
-		
-		// to-do
-		
-		
-		
 		String appPass = this.configurations.getMailUsers().containsKey(uname)? this.configurations.getMailUsers().get(uname):"";
 		
 		if(upass.equals(appPass) && appPass!="") {
