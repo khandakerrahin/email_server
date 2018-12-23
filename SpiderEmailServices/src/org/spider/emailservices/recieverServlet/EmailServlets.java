@@ -52,7 +52,7 @@ public class EmailServlets extends HttpServlet {
 		try{
 			//GenerateEmail ge = new GenerateEmail(request);
 			//ge.generate();
-			PostalServicesDS dsConn=new PostalServicesDS();
+			//PostalServicesDS dsConn=new PostalServicesDS();
 			LOGGER.info("Mail request recieved.");
 			LOGGER.info("Initiating mail service.");
 			
@@ -125,7 +125,7 @@ public class EmailServlets extends HttpServlet {
 				this.logWriter.setAction(action);
 				this.logWriter.appendInputParameters(messageBody);
 				LogWriter.LOGGER.info("retVal"+retVal);
-				this.logWriter.flush();
+				this.logWriter.flush(dsConn);
 				try {
 					dsConn.getConnection().close();
 				} catch (SQLException e) {

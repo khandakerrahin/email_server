@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre-9.0.4">
-		<attributes>
-			<attribute name="module" value="true"/>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/WildFly 11.0 Runtim">
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/WildFly 11.0 Runtime">
 		<attributes>
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/home/spider/git/SpiderEmailServices/SpiderEmailServices/WebContent/WEB-INF/lib/dbhubconnectV1.0.jar"/>
-	<classpathentry kind="lib" path="/home/spider/git/SpiderEmailServices/SpiderEmailServices/WebContent/WEB-INF/lib/ojdbc6.jar"/>
-	<classpathentry kind="lib" path="/home/spider/git/SpiderEmailServices/SpiderEmailServices/WebContent/WEB-INF/lib/java-mail-1.4.4.jar"/>
-	<classpathentry kind="lib" path="/home/spider/git/SpiderEmailServices/SpiderEmailServices/WebContent/WEB-INF/lib/gson-2.4.jar"/>
-	<classpathentry kind="lib" path="/home/spider/git/SpiderEmailServices/SpiderEmailServices/WebContent/WEB-INF/lib/javax.mail-api-1.4.7.jar.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-8-oracle">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/shaker/git/spideremailservices/SpiderEmailServices/WebContent/WEB-INF/lib/dbhubconnectV1.0.jar"/>
+	<classpathentry kind="lib" path="/home/shaker/git/spideremailservices/SpiderEmailServices/WebContent/WEB-INF/lib/gson-2.4.jar"/>
+	<classpathentry kind="lib" path="/home/shaker/git/spideremailservices/SpiderEmailServices/WebContent/WEB-INF/lib/java-mail-1.4.4.jar"/>
+	<classpathentry kind="lib" path="/home/shaker/git/spideremailservices/SpiderEmailServices/WebContent/WEB-INF/lib/javax.mail-api-1.4.7.jar.zip"/>
+	<classpathentry kind="lib" path="/home/shaker/git/spideremailservices/SpiderEmailServices/WebContent/WEB-INF/lib/ojdbc6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -112,9 +112,8 @@ public class LogWriter {
 	 * @param dsConn datasource to use for inserting the log
 	 * @return true if insert successful; false otherwise
 	 */
-	public boolean flush() {
+	public boolean flush(PostalServicesDS dsConn) {
 		boolean retval=false;
-		PostalServicesDS dsConn=new PostalServicesDS();
 		this.validateVariableBounds();
 //		SimpleDataSource sData = new SimpleDataSource(org.Banglalink.InhouseUtility.dataSource.DSInfo.getDS_INPATHS_NEW());
 		String sql = "insert into app_log"
