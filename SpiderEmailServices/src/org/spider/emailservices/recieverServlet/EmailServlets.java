@@ -37,7 +37,9 @@ public class EmailServlets extends HttpServlet {
      */
     public EmailServlets() {
         super();
+        LOGGER.info("Loading EmailSender Configs.");
         loadConf.loadConfigurationFromDB();
+        LOGGER.info("EmailSender Configs loaded.");
     }
 
 	/**

@@ -1,15 +1,16 @@
 package org.spider.emailservices.DataSources;
 
-import databasehub.oracle.connect.OracleConnect;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.naming.InitialContext;
 
+import org.spider.emailservices.Logs.LogWriter;
 import org.spider.emailservices.Utilities.NullPointerExceptionHandler;
 
 
@@ -22,26 +23,27 @@ public class PostalServicesDS {
 
 	public PostalServicesDS(){
 		super();
-		/*
+		
 		//test
-		String url = "jdbc:oracle:thin:@spiderdxb-db-oracle.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:1521:spiora";
+		String url = "jdbc:mysql://spiderdxb-db-mysql.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:3306/LebuPayTestDB";
 		String userName = "spiderdbuserTest";
 		String password = "spiderdbuserTest";/**/
 		
+		/*
 		//live
 		String url = "jdbc:oracle:thin:@spiderdxb-db-oracle.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:1521:spiora";
 		String userName = "spiderdbuser";
 		String password = "Sp1d3rDbUs3R";/**/
 		
 		
-		OracleConnect oracleConnect = new OracleConnect(url, userName, password);
-
 		try {
-			initialContext = new InitialContext();
-			con = oracleConnect.getConnection();
-			con.setAutoCommit(false);
-		}catch(Exception e){
-			System.out.println("Exception thrown " +e);
+			initialContext = new InitialContext();    
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con = DriverManager.getConnection(url,userName,password);
+            con.setAutoCommit(false);
+		} catch (Exception e) {
+		      e.printStackTrace();
+		      LogWriter.LOGGER.severe(e.getMessage());
 		}
 	}
 	public CallableStatement prepareCall(String statement) throws SQLException {

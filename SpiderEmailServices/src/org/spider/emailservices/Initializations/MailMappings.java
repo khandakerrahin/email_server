@@ -17,12 +17,12 @@ public class MailMappings {
 	}
 	public void getMailMappings(PostalServicesDS dsConnection) {
 		try {
-			String sql="SELECT from_address,configuration_id FROM mail_mapping where status=1";
+			String sql="SELECT FROM_ADDRESS,CONFIGURATION_ID FROM MAIL_MAPPING WHERE STATUS=1";
 			dsConnection.prepareStatement(sql);
 			ResultSet rs = dsConnection.executeQuery();
 			map.clear();
 			while (rs.next()) {
-				map.put(rs.getString("from_address"),rs.getString("configuration_id"));
+				map.put(rs.getString("FROM_ADDRESS"),rs.getString("CONFIGURATION_ID"));
 			}
 		}catch(Exception e){
 			LogWriter.LOGGER.severe(e.getMessage());

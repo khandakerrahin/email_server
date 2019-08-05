@@ -116,9 +116,7 @@ public class LogWriter {
 		boolean retval=false;
 		this.validateVariableBounds();
 //		SimpleDataSource sData = new SimpleDataSource(org.Banglalink.InhouseUtility.dataSource.DSInfo.getDS_INPATHS_NEW());
-		String sql = "insert into app_log"
-				+"(action,user_id,log,status,channel,additional_info,target,input_parameters,response)"
-				+" values(?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO APP_LOG (ACTION,USER_ID,LOG,STATUS,CHANNEL,ADDITIONAL_INFO,TARGET,INPUT_PARAMETERS,RESPONSE) VALUES(?,?,?,?,?,?,?,?,?)";
 		//System.out.println("SQL : "+sql);
 //				+",'"+msisdn+"'"
 ////				+","+((subscriptionTime.equals("null")||subscriptionTime.equals("sysdate"))?subscriptionTime:"to_date('"+subscriptionTime+"','yyyymmddhh24miss')")//"sysdate"//subscriptionTime

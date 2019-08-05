@@ -23,12 +23,12 @@ public class ReplyMessageLoader{
 	 */
 	public void getRelpyMessage(PostalServicesDS dsConnection) {
 		try {
-			String sql="SELECT id,sms_text,school_id,status,description FROM sms_texts";
+			String sql="SELECT ID,SMS_TEXT,SCHOOL_ID,STATUS,DESCRIPTION FROM SMS_TEXTS";
 			dsConnection.prepareStatement(sql);
 			ResultSet rs = dsConnection.executeQuery();
 			replyMessage.clear();
 			while (rs.next()) {
-				replyMessage.put(rs.getString("id")+"-"+rs.getString("school_id"), rs.getString("sms_text"));
+				replyMessage.put(rs.getString("ID")+"-"+rs.getString("SCHOOL_ID"), rs.getString("SMS_TEXT"));
 			}
 		}catch(Exception e){
 			LogWriter.LOGGER.severe(e.getMessage());

@@ -17,12 +17,12 @@ public class MailUsers {
 	}
 	public void getMailUsers(PostalServicesDS dsConnection) {
 		try {
-			String sql="SELECT app_name,password FROM email_users where status=10";
+			String sql="SELECT APP_NAME,PASSWORD FROM EMAIL_USERS WHERE STATUS=10";
 			dsConnection.prepareStatement(sql);
 			ResultSet rs = dsConnection.executeQuery();
 			map.clear();
 			while (rs.next()) {
-				map.put(rs.getString("app_name"),rs.getString("password"));
+				map.put(rs.getString("APP_NAME"),rs.getString("PASSWORD"));
 			}
 		}catch(Exception e){
 			LogWriter.LOGGER.severe(e.getMessage());
