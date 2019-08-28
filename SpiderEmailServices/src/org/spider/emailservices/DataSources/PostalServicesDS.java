@@ -24,13 +24,19 @@ public class PostalServicesDS {
 	public PostalServicesDS(){
 		super();
 		
-		//test
+		//live MySQL
+		String url = "jdbc:mysql://spiderdxb-db-mysql.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:3306/LebupayLiveDB";
+		String userName = "spiderdbuserMysql";
+		String password = "sp1derdBu3erMy3Ql";/**/
+		
+		/*
+		//test MySQL
 		String url = "jdbc:mysql://spiderdxb-db-mysql.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:3306/LebuPayTestDB";
 		String userName = "spiderdbuserTest";
 		String password = "spiderdbuserTest";/**/
 		
 		/*
-		//live
+		//live oracle
 		String url = "jdbc:oracle:thin:@spiderdxb-db-oracle.cytde62j1uix.ap-southeast-1.rds.amazonaws.com:1521:spiora";
 		String userName = "spiderdbuser";
 		String password = "Sp1d3rDbUs3R";/**/
